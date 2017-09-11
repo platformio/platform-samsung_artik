@@ -10,15 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SamsungARTIK/platform-samsung_artik.git"
+    "url": "https://github.com/platformio/platform-samsung_artik.git"
   },
   "version": "1.0.0",
   "packageRepositories": [
     "http://109.105.112.157:8080/manifest.json",
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
-    "https://sourceforge.net/projects/platformio-storage/files/packages/manifest.json/download",
     "http://dl.platformio.org/packages/manifest.json",
-    "https://raw.githubusercontent.com/eerimoq/simba/master/make/platformio/manifest.json",
     "http://repo.artik.cloud/artik/bin/pub/platformio/manifest.json"
   ],
   "frameworks": {
