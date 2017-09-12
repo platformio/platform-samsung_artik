@@ -1,72 +1,85 @@
-from os.path import join
-from SCons.Script import DefaultEnvironment
+# Copyright 2014-present PlatformIO <contact@platformio.org>
+# Copyright 2017 Samsung Electronics
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import sys
+from base64 import b64decode
+from os import listdir
+from os.path import isdir, isfile, join
+
+from SCons.Script import ARGUMENTS, DefaultEnvironment
+
 from platformio import util
-import os
-import json
 
 env = DefaultEnvironment()
 
+FRAMEWORK_DIR = env.PioPlatform().get_package_dir("framework-tizenrt")
+assert isdir(FRAMEWORK_DIR)
 
-def getPreConfig(sdkdir):
 
-    if util.load_project_config().has_option("env:%s" % (env.subst("$BOARD")), "pre_config"):
-        pre_config = util.load_project_config().get("env:%s" % (env.subst("$BOARD")), "pre_config")
-        if os.path.exists(join(sdkdir, "libsdk", pre_config)):
-            pass
-        else:
-            print 'Wrong pre_config, please check it in platform.ini. Use "typical" as default.'
-            pre_config = "typical"
-        configdir = join(sdkdir, "libsdk", pre_config)
-    else:
-        pre_config = "typical"
-        configdir = join(sdkdir, "libsdk", pre_config)
-    return (pre_config, configdir)
+def getPreConfig():
+    pre_config = "typical"
+    if ARGUMENTS.get("CUSTOM_PRE_CONFIG", ""):
+        pre_config = b64decode(ARGUMENTS.get("CUSTOM_PRE_CONFIG"))
+    if pre_config and not isdir(join(FRAMEWORK_DIR, "libsdk", pre_config)):
+        sys.stderr.write(
+            "Error: Wrong `custom_pre_config`, please check it in "
+            "platformio.ini. Use 'typical' as default.\n")
+        env.Exit(1)
+    return pre_config
 
 
 def getLibsName(path):
     ret = []
-    elelist = os.listdir(path)
+    elelist = listdir(path)
     for element in elelist:
-        filepath = os.path.join(path, element)
-        if (os.path.isfile(filepath) and element.endswith('.a')):
-            ret.append(element[3: -2])
+        filepath = join(path, element)
+        if isfile(filepath) and element.endswith('.a'):
+            ret.append(element[3:-2])
     return ret
 
 
 def parseSdkConfigsJson(basepath, filepath, pre_config):
     ret = {}
-    jsonfile = open(filepath)
-    data = json.load(jsonfile)
+    data = util.load_json(filepath)
     prelist = data['preBuildConfigs']
     for element in prelist:
         key = element['id']
         valueList = element['includePaths']
         for index in range(len(valueList)):
-            valueList[index] = os.path.join(basepath, valueList[index])
+            valueList[index] = join(basepath, valueList[index])
         ret[key] = valueList
     return ret[pre_config]
 
-sdkdir = env.PioPlatform().get_package_dir("framework-tizenrt")
 
-(pre_config, configdir) = getPreConfig(sdkdir)
+pre_config = getPreConfig()
+configdir = join(FRAMEWORK_DIR, "libsdk", pre_config)
 
 libdir = join(configdir, "libs")
 
-entry_lib = (env.Library(join("$BUILD_DIR", "entry"), [join(sdkdir, "examples/hello/._main.c"), join(libdir, "arm_vectortab.o")]))
+entry_lib = env.Library(
+    join("$BUILD_DIR", "entry"), [
+        join(FRAMEWORK_DIR, "examples", "hello", "._main.c"),
+        join(libdir, "arm_vectortab.o")
+    ])
 
 env.Append(
-    LIBS=[
-        getLibsName(libdir),
-        entry_lib
-    ],
-    LIBPATH=[
-        libdir
-    ],
-    LDSCRIPT_PATH=join(sdkdir, "common", "scripts", "flash.ld"),
-    CPPPATH=parseSdkConfigsJson(configdir, join(sdkdir, ".metadata", "configs.json"), pre_config)
-)
+    LIBS=[getLibsName(libdir), entry_lib],
+    LIBPATH=[libdir],
+    LDSCRIPT_PATH=join(FRAMEWORK_DIR, "common", "scripts", "flash.ld"),
+    CPPPATH=parseSdkConfigsJson(configdir,
+                                join(FRAMEWORK_DIR, ".metadata",
+                                     "configs.json"), pre_config))
 
-env.Replace(
-    HEADERTOOL=join(env.PioPlatform().get_package_dir("framework-tizenrt") or "",
-                    "common/tools/s5jchksum.py")
-)
+env.Replace(HEADERTOOL=join(FRAMEWORK_DIR, "common", "tools", "s5jchksum.py"))
