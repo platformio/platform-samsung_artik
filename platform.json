@@ -14,7 +14,6 @@
   },
   "version": "1.0.0",
   "packageRepositories": [
-    "http://109.105.112.157:8080/manifest.json",
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json",
     "http://repo.artik.cloud/artik/bin/pub/platformio/manifest.json"
