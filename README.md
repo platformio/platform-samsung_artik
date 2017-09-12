@@ -24,6 +24,14 @@ and debugging.
 
 ### macOS
 
+First check that you have a FTDI compatible driver on your mac:
+```bash
+$ kextstat | grep FTDI
+```
+You should have `com.apple.driver.AppleUSBFTDI` or `com.FTDI.driver.FTDIUSBSerialDriver` listed.
+If neither shows then you need to download and install proper driver for your macOS version from
+[FTDI's website](http://www.ftdichip.com/Drivers/VCP.htm).
+
 After platformio has installed the `tool-artik-openocd package`, look for the
 following file in your platformio's installation directory:
 ```bash
