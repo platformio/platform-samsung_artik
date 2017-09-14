@@ -25,14 +25,6 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 
 
-def BeforeUpload(target, source, env):
-    switchPath = join(
-        platform.get_package_dir("tool-artik-openocd") or "",
-        "switch-driver.py")
-    if "darwin" in util.get_systype() and isfile(switchPath):
-        Execute("sudo " + switchPath)
-
-
 env.Replace(
     AR="arm-none-eabi-ar",
     AS="arm-none-eabi-as",
@@ -76,8 +68,8 @@ env.Replace(
         "gcc"
     ],
 
-    CCCOM='$CC -o $TARGET -c $CFLAGS $CCFLAGS_ $_CCCOMCOM $SOURCES',
-    LINKCOM='$LINK -o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS -Wl,--start-group $_LIBFLAGS -Wl,--end-group',
+    PIODEBUGFLAGS=["-O0", "-g3", "-ggdb"],
+
     SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES',
 
     PROGNAME="program",
@@ -157,8 +149,17 @@ AlwaysBuild(target_size)
 # Target: Upload by default .bin file
 #
 
+
+def SwitchDriver(target, source, env):
+    switchPath = join(
+        platform.get_package_dir("tool-artik-openocd") or "",
+        "switch-driver.py")
+    if "darwin" in util.get_systype() and isfile(switchPath):
+        Execute("sudo " + switchPath)
+
+
 target_upload = env.Alias("upload", target_prog, [
-    env.VerboseAction(BeforeUpload, "Switching driver..."),
+    env.VerboseAction(SwitchDriver, "Switching driver..."),
     env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
 ])
 AlwaysBuild(target_upload)
