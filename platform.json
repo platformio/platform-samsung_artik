@@ -16,7 +16,7 @@
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json",
-    "http://repo.artik.cloud/artik/bin/pub/platformio/manifest.json"
+    "http://developer.artik.io/downloads/artik_ide/platformio/manifest.json"
   ],
   "frameworks": {
     "tizenrt": {

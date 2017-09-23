@@ -25,7 +25,10 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 
 
+
+BUILD_DIR_FIX = env.subst("$BUILD_DIR").replace("\\", "/")
 env.Replace(
+    BUILD_DIR=BUILD_DIR_FIX,
     AR="arm-none-eabi-ar",
     AS="arm-none-eabi-as",
     CC="arm-none-eabi-gcc",
@@ -114,7 +117,7 @@ env.Replace(
     UPLOADERFLAGS=[
         "-s", platform.get_package_dir("tool-artik-openocd"),
         "-f", "%s.cfg" % env.subst("$BOARD"),
-        "-c", "flash_write os $SOURCES; exit"
+        "-c", "flash_write os $BUILD_DIR/program.bin; exit"
     ],
 
     UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS',
@@ -148,18 +151,7 @@ AlwaysBuild(target_size)
 #
 # Target: Upload by default .bin file
 #
-
-
-def SwitchDriver(target, source, env):
-    switchPath = join(
-        platform.get_package_dir("tool-artik-openocd") or "",
-        "switch-driver.py")
-    if "darwin" in util.get_systype() and isfile(switchPath):
-        Execute("sudo " + switchPath)
-
-
 target_upload = env.Alias("upload", target_prog, [
-    env.VerboseAction(SwitchDriver, "Switching driver..."),
     env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
 ])
 AlwaysBuild(target_upload)

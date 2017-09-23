@@ -28,20 +28,8 @@ First check that you have a FTDI compatible driver on your mac:
 ```bash
 $ kextstat | grep FTDI
 ```
-You should have `com.apple.driver.AppleUSBFTDI` or `com.FTDI.driver.FTDIUSBSerialDriver` listed.
-If neither shows then you need to download and install proper driver for your macOS version from
-[FTDI's website](http://www.ftdichip.com/Drivers/VCP.htm).
-
-After platformio has installed the `tool-artik-openocd package`, look for the
-following file in your platformio's installation directory:
-```bash
-/Users/<username>/.platformio/packages/tool-artik-openocd/switch-driver.py
-```
-Edit the `/etc/sudoers` file and add the following line
-```bash
-<username> ALL = (ALL) NOPASSWD: <Full path to switch-driver.py>
-```
-Make sure you replace `<username>` with the actual user logged into macOS.
+You should have `com.apple.driver.AppleUSBFTDI`,
+and then install [Artik_FTDI_Driver](http://developer.artik.io/downloads/artik_ide/platformio/Artik053FTDIDriver.pkg) after finish reboot your system.
 
 ### Linux
 
@@ -50,3 +38,7 @@ following line:
 ```bash
 SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE="0660", GROUP="plugdev", SYMLINK+="artik053-%n"
 ```
+
+### windows
+1. Usually windows update service will automatically install [FTDI driver](http://developer.artik.io/downloads/artik_ide/platformio/CDM_v2.12.26_WHQL_Certified.zip),If nessary you can choose an offline installation.
+2.After install FTDI driver it will has two FTDI device and use [zadig](http://developer.artik.io/downloads/artik_ide/platformio/zadig-2.3.exe) tool change one FTDI device to a libusb compatible device.
