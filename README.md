@@ -30,8 +30,9 @@ First check that you have a FTDI compatible driver on your mac:
 ```bash
 $ kextstat | grep FTDI
 ```
-You should have `com.apple.driver.AppleUSBFTDI`,
-and then install [Artik_FTDI_Driver](http://developer.artik.io/downloads/artik_ide/platformio/Artik053FTDIDriver.pkg) after finish reboot your system.
+You should have `com.apple.driver.AppleUSBFTDI`.
+1. install [Artik_FTDI_Driver](http://developer.artik.io/downloads/artik_ide/platformio/Artik053FTDIDriver.pkg).
+2. reboot your system.
 
 ### Linux
 
@@ -42,5 +43,5 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE="0660", 
 ```
 
 ### windows
-1. Usually windows update service will automatically install [FTDI driver](http://developer.artik.io/downloads/artik_ide/platformio/CDM_v2.12.26_WHQL_Certified.zip),If nessary you can choose an offline installation.
-2.After install FTDI driver it will has two FTDI device and use [zadig](http://developer.artik.io/downloads/artik_ide/platformio/zadig-2.3.exe) tool change one FTDI device to a libusb compatible device.
+1. Usually windows update service will automatically install [FTDI driver](http://developer.artik.io/downloads/artik_ide/platformio/CDM_v2.12.26_WHQL_Certified.zip),If necessary you can choose an offline installation.
+2. After install FTDI driver it will has two FTDI device and use [zadig](http://developer.artik.io/downloads/artik_ide/platformio/zadig-2.3.exe) tool change one FTDI device to a libusb compatible device.
