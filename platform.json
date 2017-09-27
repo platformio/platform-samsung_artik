@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-samsung_artik.git"
   },
-  "version": "1.0.0",
+  "version": "0.0.0",
   "packageRepositories": [
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json",
@@ -31,6 +31,7 @@
     },
     "tool-artik-openocd": {
       "type": "uploader",
+      "optional": true,
       "version": ">=0.10.0"
     },
     "framework-tizenrt": {
