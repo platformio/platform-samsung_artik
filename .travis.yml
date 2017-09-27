@@ -1,0 +1,24 @@
+language: python
+python:
+  - "2.7"
+
+env:
+  - PLATFORMIO_PROJECT_DIR=examples/artik_sdk
+  - PLATFORMIO_PROJECT_DIR=examples/blink_led_wifi
+  - PLATFORMIO_PROJECT_DIR=examples/hello
+
+install:
+  - pip install -U https://github.com/platformio/platformio/archive/develop.zip
+  - platformio platform install file://.
+
+script:
+  - platformio run -d $PLATFORMIO_PROJECT_DIR
+
+notifications:
+  email: false
+
+  slack:
+    rooms:
+      secure: iuNA6aEPQd852hsErD75hzXBoyMNNuVs1uzlej02nj1Ay7zY4sLPvQ4qnjfdm6RNAj01CvSWbCIZXz4vNSQT052uI/Q6nQZdvob7YXJsnjTBUUCQpWdZttx2Hv+n2EeCnYrXRmiehbEW0wlKA8Ip5W6sxct29OiMzZIVdvdMeazKha/O00ZGCnyFlvC7k85LkQ6X5Jga48K5wXfaWIQXDd0HHstwChot7Un4FiKlbmIqsEJS8b5S3JVZIXbLvS7R/6Qun3UrtHU0803B+nRi11nAbKrZdLgCWSCAt9CFc74EhG3xxLvl1IEuus1u8VjhicFsplxQvux2I/cZs5ypDruO/dU+PJNZLEl8gCnnvY65lhIIjyfC0xGhplkIvkVJzMDnwmjGK3okvskn50ek+WQPmlSHoqnJ+2c2cZQtXWbWHMdHCfs1xsBUBeEfiKTE1USXMhZxq/bD7ILnrUGCfWRF5NqvsHy+43pLIbd2jvOPRug6VDN1rlGiIge3hWNwt4/gyrT+pVXO+LfofI2LcgSKK3qN6ZOpYEUfbbmD4HgkMaav6PMCGoq4gKsZjZsSbSMDGd7WCT1SNp6qtBgK7hboNaCIb/qcduO/ypGo+dt5XHtbVSlQtjQ3KZnK2gdEN0SufwDZkX+2EIjmg7EgV+IdvjLyjXRui5eo4AH4t6w=
+    on_failure: always
+    on_success: change

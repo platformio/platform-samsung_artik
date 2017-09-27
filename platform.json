@@ -1,0 +1,42 @@
+{
+  "name": "samsung_artik",
+  "title": "Samsung ARTIK",
+  "description": "The Samsung ARTIK Smart IoT platform brings hardware modules and cloud services together, with built-in security and an ecosystem of tools and partners to speed up your time-to-market.",
+  "url": "http://platformio.org/platforms/samsung_artik",
+  "homepage": "https://www.artik.io",
+  "license": "Apache-2.0",
+  "engines": {
+    "platformio": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/platformio/platform-samsung_artik.git"
+  },
+  "version": "1.0.0",
+  "packageRepositories": [
+    "https://dl.bintray.com/platformio/dl-packages/manifest.json",
+    "http://dl.platformio.org/packages/manifest.json",
+    "http://developer.artik.io/downloads/artik_ide/platformio/manifest.json"
+  ],
+  "frameworks": {
+    "tizenrt": {
+      "package": "framework-tizenrt",
+      "script": "builder/frameworks/tizenrt/tizenrt.py"
+    }
+  },
+  "packages": {
+    "toolchain-gccarmnoneeabi": {
+      "type": "toolchain",
+      "version": ">=1.40803.0"
+    },
+    "tool-artik-openocd": {
+      "type": "uploader",
+      "optional": true,
+      "version": ">=0.10.0"
+    },
+    "framework-tizenrt": {
+      "type": "framework",
+      "version": ">=1.2.0"
+    }
+  }
+}
