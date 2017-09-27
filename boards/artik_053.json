@@ -9,6 +9,8 @@
   ],
   "name": "Samsung ARTIK053",
   "upload": {
+    "maximum_ram_size": 1310720,
+    "maximum_size": 8388608
   },
   "debug": {
     "tools": {
@@ -17,7 +19,7 @@
           "package": "tool-artik-openocd",
           "executable": "openocd",
           "arguments": [
-            "-f", 
+            "-f",
             "artik_053.cfg"
           ]
         },
