@@ -1,6 +1,6 @@
 # Samsung ARTIK: development platform for [PlatformIO](http://platformio.org)
 [![Build Status](https://travis-ci.org/platformio/platform-samsung_artik.svg?branch=develop)](https://travis-ci.org/platformio/platform-samsung_artik)
-[![Build status](https://ci.appveyor.com/api/projects/status/6vyuk4avv66atccu/branch/develop?svg=true)](https://ci.appveyor.com/project/ivankravets/platform-samsung-artik/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/uluymxw3k4w41g2c?svg=true)](https://ci.appveyor.com/project/ivankravets/platform-samsung-artik)
 
 The Samsung ARTIK platform brings support to PlatformIO for the non Linux-based
 ARTIK modules. The boards that are currently supported by this platform are:
