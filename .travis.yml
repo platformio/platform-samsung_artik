@@ -3,6 +3,7 @@ python:
   - "2.7"
 
 env:
+  - PLATFORMIO_PROJECT_DIR=examples/artik_sdk
   - PLATFORMIO_PROJECT_DIR=examples/blink_led_wifi
   - PLATFORMIO_PROJECT_DIR=examples/hello
 
