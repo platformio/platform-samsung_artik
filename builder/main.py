@@ -13,17 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from os.path import isfile, join
+from os.path import join
 
 from SCons.Script import (AlwaysBuild, Builder, COMMAND_LINE_TARGETS,
                           Default, DefaultEnvironment, Execute)
 
-from platformio import util
-
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
-
 
 
 BUILD_DIR_FIX = env.subst("$BUILD_DIR").replace("\\", "/")
@@ -56,7 +53,9 @@ env.Replace(
         "-fno-strict-aliasing",
         "-fno-strength-reduce",
         "-fomit-frame-pointer",
-        "-Wp,-w"
+        "-Wp,-w",
+        "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
+        "-mfpu=vfpv3"
     ],
 
     LINKFLAGS=[
@@ -64,7 +63,9 @@ env.Replace(
         "-mthumb",
         "-nostartfiles",
         "-nostdlib",
-        "--entry=__start"
+        "--entry=__start",
+        "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
+        "-mfpu=vfpv3"
     ],
 
     LIBS=[
@@ -75,20 +76,18 @@ env.Replace(
 
     SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES',
 
-    PROGNAME="program",
-    PROGSUFFIX=".elf"
+    PROGSUFFIX=".elf",
+
+    UPLOADER="openocd",
+    UPLOADERFLAGS=[
+        "-s", platform.get_package_dir("tool-artik-openocd"),
+        "-f", "%s.cfg" % env.subst("$BOARD"),
+        "-c", "flash_write os $BUILD_DIR/program.bin; exit"
+    ],
+    UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
 )
 
 env.Append(
-    CCFLAGS=[
-        "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-        "-mfpu=vfpv3"
-    ],
-    LINKFLAGS=[
-        "-mcpu=%s" % env.BoardConfig().get("build.cpu"),
-        "-mfpu=vfpv3"
-    ],
-
     BUILDERS=dict(
         ElfToBin=Builder(
             action=env.VerboseAction(" ".join([
@@ -112,16 +111,6 @@ env.Append(
     )
 )
 
-env.Replace(
-    UPLOADER="openocd",
-    UPLOADERFLAGS=[
-        "-s", platform.get_package_dir("tool-artik-openocd"),
-        "-f", "%s.cfg" % env.subst("$BOARD"),
-        "-c", "flash_write os $BUILD_DIR/program.bin; exit"
-    ],
-
-    UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS',
-)
 
 #
 # Target: Build executable and linkable program
@@ -129,11 +118,11 @@ env.Replace(
 
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
-    target_prog = join("$BUILD_DIR", "program.bin")
+    target_prog = join("$BUILD_DIR", "${PROGNAME}.bin")
 else:
     target_elf = env.BuildProgram()
     target_prog = env.NS2Bin(
-        join("$BUILD_DIR", "program"),
+        join("$BUILD_DIR", "${PROGNAME}"),
         env.ElfToBin(join("$BUILD_DIR", "interim_program"), target_elf))
 
 AlwaysBuild(env.Alias("nobuild", target_prog))
