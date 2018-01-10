@@ -6,18 +6,33 @@ The Samsung ARTIK platform brings support to PlatformIO for the non Linux-based
 ARTIK modules. The boards that are currently supported by this platform are:
  * `artik_053`: ARTIK 053 Wi-Fi module running TizenRT
 
-## Usage
+* [Home](http://platformio.org/platforms/samsung_artik) (home page in PlatformIO Platform Registry)
+* [Documentation](http://docs.platformio.org/page/platforms/samsung_artik.html) (advanced usage, packages, boards, frameworks, etc.)
 
-1. [Install PlatformIO Core](http://docs.platformio.org/page/core.html)
-2. Install Samsung ARTIK development platform:
-```bash
-# install the latest stable version
-> platformio platform install samsung_artik
 
-# install development version
-> platformio platform install https://github.com/platformio/platform-samsung_artik.git
+# Usage
+
+1. [Install PlatformIO](http://platformio.org)
+2. Create PlatformIO project and configure a platform option in [platformio.ini](http://docs.platformio.org/page/projectconf.html) file:
+
+## Stable version
+
+```ini
+[env:stable]
+platform = samsung_artik
+board = ...
+...
 ```
 
-## Configuration
+## Development version
+
+```ini
+[env:development]
+platform = https://github.com/platformio/platform-samsung_artik.git
+board = ...
+...
+```
+
+# Configuration
 
 Please navigate to [documentation](http://docs.platformio.org/page/platforms/samsung_artik.html#configuration).
