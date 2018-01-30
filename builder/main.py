@@ -16,7 +16,7 @@
 from os.path import join
 
 from SCons.Script import (AlwaysBuild, Builder, COMMAND_LINE_TARGETS,
-                          Default, DefaultEnvironment, Execute)
+                          Default, DefaultEnvironment)
 
 
 env = DefaultEnvironment()
@@ -41,7 +41,6 @@ env.Replace(
     ],
 
     CCFLAGS_=[
-        "-g",   # include debugging info (so errors include line numbers)
         "-O0",  # optimize for size
         "-Wall",
         "-fno-builtin",
