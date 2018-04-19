@@ -4,6 +4,27 @@
     "f_cpu": "320000000L",
     "mcu": "s5jt200"
   },
+  "debug": {
+    "tools": {
+      "custom": {
+        "default": true,
+        "extra_cmds": [
+          "monitor cortex_r4 maskisr on",
+          "monitor reset halt",
+          "b main"
+        ],
+        "load_cmd": [],
+        "server": {
+          "arguments": [
+            "-f",
+            "artik_053.cfg"
+          ],
+          "executable": "openocd",
+          "package": "tool-artik-openocd"
+        }
+      }
+    }
+  },
   "frameworks": [
     "tizenrt"
   ],
@@ -11,28 +32,6 @@
   "upload": {
     "maximum_ram_size": 1310720,
     "maximum_size": 8388608
-  },
-  "debug": {
-    "tools": {
-      "custom": {
-        "server": {
-          "package": "tool-artik-openocd",
-          "executable": "openocd",
-          "arguments": [
-            "-f",
-            "artik_053.cfg"
-          ]
-        },
-        "load_cmd": [
-        ],
-        "extra_cmds":[
-          "monitor cortex_r4 maskisr on",
-          "monitor reset halt",
-          "b main"
-        ],
-        "default": true
-      }
-    }
   },
   "url": "http://www.artik.io",
   "vendor": "Samsung"
