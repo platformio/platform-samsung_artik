@@ -6,7 +6,7 @@
   },
   "debug": {
     "tools": {
-      "custom": {
+      "ft2232h": {
         "default": true,
         "extra_cmds": [
           "monitor cortex_r4 maskisr on",
