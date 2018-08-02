@@ -7,7 +7,7 @@
   "debug": {
     "tools": {
       "ftdi": {
-        "default": true,
+        "onboard": true,
         "extra_cmds": [
           "monitor cortex_r4 maskisr on",
           "monitor reset halt",
