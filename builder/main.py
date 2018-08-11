@@ -40,6 +40,25 @@ env.Replace(
         "-D__ASSEMBLY__"
     ],
 
+    PIODEBUGFLAGS=["-O0", "-g3", "-ggdb"],
+
+    SIZEPROGREGEXP=r"^(?:\.text|\.data|\.rodata|\.text.align|\.ARM.exidx)\s+(\d+).*",
+    SIZEDATAREGEXP=r"^(?:\.data|\.bss|\.noinit)\s+(\d+).*",
+    SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
+    SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES',
+
+    PROGSUFFIX=".elf",
+
+    UPLOADER="openocd",
+    UPLOADERFLAGS=[
+        "-s", platform.get_package_dir("tool-artik-openocd"),
+        "-f", "%s.cfg" % env.subst("$BOARD"),
+        "-c", "flash_write os $BUILD_DIR/program.bin; exit"
+    ],
+    UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
+)
+
+env.Append(
     CCFLAGS_=[
         "-O0",  # optimize for size
         "-Wall",
@@ -71,22 +90,6 @@ env.Replace(
         "gcc"
     ],
 
-    PIODEBUGFLAGS=["-O0", "-g3", "-ggdb"],
-
-    SIZEPRINTCMD='$SIZETOOL -B -d $SOURCES',
-
-    PROGSUFFIX=".elf",
-
-    UPLOADER="openocd",
-    UPLOADERFLAGS=[
-        "-s", platform.get_package_dir("tool-artik-openocd"),
-        "-f", "%s.cfg" % env.subst("$BOARD"),
-        "-c", "flash_write os $BUILD_DIR/program.bin; exit"
-    ],
-    UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
-)
-
-env.Append(
     BUILDERS=dict(
         ElfToBin=Builder(
             action=env.VerboseAction(" ".join([
